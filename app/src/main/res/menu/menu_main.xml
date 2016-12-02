@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.MainActivity">
+
+    <item
+        android:id="@+id/action_analysis"
+        android:title="@string/title_analysis"
+        android:icon="@drawable/action_analysis"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_history"
+        android:title="@string/title_history"
+        android:icon="@drawable/action_history"
+        app:showAsAction="always" />
+
+</menu>

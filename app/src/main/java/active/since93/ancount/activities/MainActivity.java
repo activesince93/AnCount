@@ -1,0 +1,274 @@
+package active.since93.ancount.activities;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.TypefaceSpan;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+
+import active.since93.ancount.R;
+import active.since93.ancount.constants.Constants;
+import active.since93.ancount.database.DatabaseHandler;
+import active.since93.ancount.graph.MyMarkerView;
+import active.since93.ancount.model.UnlockDataItem;
+import active.since93.customfont.CustomTextView;
+
+public class MainActivity extends AppCompatActivity {
+
+    private CustomTextView todayCount, averageCountTextView, lastWeekCount, yesterdayCount;
+    DatabaseHandler databaseHandler;
+    private BarChart mChart;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        loadAd();
+
+        // Receive broadcast message
+        IntentFilter intentFilter = new IntentFilter(Constants.UPDATE_ACTIVITIES);
+        LocalBroadcastManager.getInstance(this).registerReceiver(updateDataReceiver, intentFilter);
+
+        todayCount = (CustomTextView) findViewById(R.id.txtCount);
+        averageCountTextView = (CustomTextView) findViewById(R.id.aversgeCount);
+        lastWeekCount = (CustomTextView) findViewById(R.id.lastWeekCount);
+        yesterdayCount = (CustomTextView) findViewById(R.id.yesterdayCount);
+        mChart = (BarChart) findViewById(R.id.lastWeekChart);
+        databaseHandler = new DatabaseHandler(this);
+
+        setActionBarCustomFont();
+        updateData();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_history) {
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_analysis) {
+            Intent intent = new Intent(MainActivity.this, AnalysisActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void loadAd() {
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("01655592ABF64891026E34AE31E4D613")
+                .addTestDevice("9F5AC4E8105A5E67840DFECF888E4B84")
+                .build();
+        mAdView.loadAd(adRequest);
+    }
+
+    private void setChartProperties() {
+        mChart.setDescription("");
+        setChartData();
+        mChart.setMaxVisibleValueCount(60);
+        mChart.setPinchZoom(false);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawValueAboveBar(false);
+        mChart.setDrawGridBackground(false);
+
+        MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
+        mChart.setMarkerView(mv);
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setSpaceBetweenLabels(0);
+        xAxis.setDrawGridLines(false);
+        xAxis.setTextColor(Color.WHITE);
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Light.ttf");
+        xAxis.setTypeface(font);
+
+        YAxis yAxis = mChart.getAxisLeft();
+        yAxis.setTextColor(Color.WHITE);
+        yAxis.setTypeface(font);
+
+        YAxis yAxis1 = mChart.getAxisRight();
+        yAxis1.setTextColor(Color.WHITE);
+        yAxis1.setTypeface(font);
+
+        mChart.getAxisLeft().setDrawGridLines(false);
+        mChart.animateY(0);
+        mChart.getLegend().setEnabled(false);
+    }
+
+    private void setActionBarCustomFont() {
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Light.ttf");
+        SpannableStringBuilder ss = new SpannableStringBuilder(getString(R.string.app_name_caps));
+        ss.setSpan(new CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        if (actionBar != null) {
+            actionBar.setTitle(ss);
+        }
+    }
+
+    private void setChartData() {
+        int todayCountInt = 0, yesterdayCountInt = 0, lastWeekCountInt = 0;
+
+        ArrayList<UnlockDataItem> unlockDataItemArrayList;
+        ArrayList<BarEntry> yVals = new ArrayList<>();
+        ArrayList<String> xVals;
+        // last 7 days
+        unlockDataItemArrayList = databaseHandler.getPreviousData(6, 0, 0);
+        xVals = databaseHandler.getLast7daysNames();
+        for (int i = 0; i < xVals.size(); i++) {
+            int count = 0;
+            for (int j = 0; j < unlockDataItemArrayList.size(); j++) {
+                if (xVals.get(i).equalsIgnoreCase(unlockDataItemArrayList.get(j).getDayName())) {
+                    count += 1;
+                }
+            }
+            if(i == (xVals.size() - 1)) todayCountInt = count;
+            if(i == (xVals.size() - 2)) yesterdayCountInt = count;
+            lastWeekCountInt += count;
+            yVals.add(new BarEntry(count, i));
+        }
+        BarDataSet set1 = new BarDataSet(yVals, "Data Set");
+        set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        set1.setDrawValues(false);
+
+        ArrayList<BarDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+
+        BarData data = new BarData(xVals, dataSets);
+        mChart.setData(data);
+        mChart.invalidate();
+
+        yesterdayCount.setText(String.valueOf(yesterdayCountInt));
+        todayCount.setText(String.valueOf(todayCountInt));
+        lastWeekCount.setText(String.valueOf(lastWeekCountInt));
+    }
+
+    public static void backupDatabase() throws IOException {
+        //Open your local db as the input stream
+        String inFileName = "/data/data/active.since93.unlockcounter/databases/unlock_database";
+        File dbFile = new File(inFileName);
+        FileInputStream fis = new FileInputStream(dbFile);
+
+        String outFileName = Environment.getExternalStorageDirectory() + "/unlock_database";
+        //Open the empty db as the output stream
+        OutputStream output = new FileOutputStream(outFileName);
+        //transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer)) > 0) {
+            output.write(buffer, 0, length);
+        }
+        //Close the streams
+        output.flush();
+        output.close();
+        fis.close();
+    }
+
+    public class CustomTypefaceSpan extends TypefaceSpan {
+        private final Typeface newType;
+        public CustomTypefaceSpan(String family, Typeface type) {
+            super(family);
+            newType = type;
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            applyCustomTypeFace(ds, newType);
+        }
+
+        @Override
+        public void updateMeasureState(TextPaint paint) {
+            applyCustomTypeFace(paint, newType);
+        }
+
+        private void applyCustomTypeFace(Paint paint, Typeface tf) {
+            int oldStyle;
+            Typeface old = paint.getTypeface();
+            if (old == null) {
+                oldStyle = 0;
+            } else {
+                oldStyle = old.getStyle();
+            }
+
+            int fake = oldStyle & ~tf.getStyle();
+            if ((fake & Typeface.BOLD) != 0) {
+                paint.setFakeBoldText(true);
+            }
+
+            if ((fake & Typeface.ITALIC) != 0) {
+                paint.setTextSkewX(-0.25f);
+            }
+            paint.setTypeface(tf);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Constants.STATUS_MAIN_ACTIVITY = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Constants.STATUS_MAIN_ACTIVITY = false;
+    }
+
+    private final BroadcastReceiver updateDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(Constants.STATUS_MAIN_ACTIVITY) {
+                updateData();
+            }
+        }
+    };
+
+    // Update displaying data
+    private void updateData() {
+        setChartProperties();
+
+        int totalEntries = databaseHandler.getTotalUnlocksCount();
+        int totalDays = databaseHandler.getNumberOfTotalDays();
+        if (totalDays != 0 && totalEntries != 0)
+            averageCountTextView.setText(String.valueOf(totalEntries / totalDays));
+    }
+}

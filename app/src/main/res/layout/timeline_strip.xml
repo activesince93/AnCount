@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/last7Days"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="1dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background_selector"
+        android:text="7d"
+        android:enabled="false"
+        android:textColor="@color/windowBackground" />
+
+    <Button
+        android:id="@+id/lastMonth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="1dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background_selector"
+        android:text="1m"
+        android:textColor="@color/windowBackground" />
+
+    <Button
+        android:id="@+id/last3Months"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="1dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background_selector"
+        android:text="3m"
+        android:textColor="@color/windowBackground" />
+
+    <Button
+        android:id="@+id/last6Months"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="1dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_background_selector"
+        android:text="6m"
+        android:textColor="@color/windowBackground" />
+
+    <Button
+        android:id="@+id/lastYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/button_background_selector"
+        android:text="1y"
+        android:textColor="@color/windowBackground" />
+</merge>

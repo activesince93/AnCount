@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@color/lightBlack"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <active.since93.customfont.CustomTextView
+        android:id="@+id/txtListHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="September, 2015"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <active.since93.customfont.CustomTextView
+            android:id="@+id/txtListHeaderCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1542"
+            android:textStyle="bold"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="20dp" />
+
+        <active.since93.customfont.CustomTextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="unlocks"
+            android:textColor="@color/textColorPrimary" />
+    </LinearLayout>
+</LinearLayout>
