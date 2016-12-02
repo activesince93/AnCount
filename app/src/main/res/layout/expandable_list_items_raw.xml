@@ -17,7 +17,7 @@
         android:padding="15dp"
         android:orientation="horizontal">
 
-        <active.since93.customfont.CustomTextView
+        <active.since93.ancount.custom.CustomTextView
             android:id="@+id/txtListItem"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:textSize="16dp" />
 
 
-        <active.since93.customfont.CustomTextView
+        <active.since93.ancount.custom.CustomTextView
             android:id="@+id/txtListItemCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:textColor="@color/windowBackground"
             android:textSize="16dp" />
 
-        <active.since93.customfont.CustomTextView
+        <active.since93.ancount.custom.CustomTextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

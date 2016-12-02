@@ -37,10 +37,10 @@ import java.util.ArrayList;
 
 import active.since93.ancount.R;
 import active.since93.ancount.constants.Constants;
+import active.since93.ancount.custom.CustomTextView;
 import active.since93.ancount.database.DatabaseHandler;
 import active.since93.ancount.graph.MyMarkerView;
 import active.since93.ancount.model.UnlockDataItem;
-import active.since93.customfont.CustomTextView;
 
 public class MainActivity extends AppCompatActivity {
 

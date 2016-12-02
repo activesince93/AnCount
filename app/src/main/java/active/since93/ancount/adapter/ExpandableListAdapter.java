@@ -9,8 +9,8 @@ import android.widget.BaseExpandableListAdapter;
 import java.util.HashMap;
 import java.util.List;
 
-import active.since93.customfont.CustomTextView;
 import active.since93.ancount.R;
+import active.since93.ancount.custom.CustomTextView;
 import active.since93.ancount.model.ExpandableListHeaderItem;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
