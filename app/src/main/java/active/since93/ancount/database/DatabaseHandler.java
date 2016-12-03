@@ -288,6 +288,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return unlockDataItemArrayList;
     }
+
     public ArrayList<String> getLast7daysNames() {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectChoice = "SELECT strftime('%s','now','-6 day')";
