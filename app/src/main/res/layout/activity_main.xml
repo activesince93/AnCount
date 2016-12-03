@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <active.since93.ancount.custom.CustomTextView
                     android:id="@+id/txtCount"
@@ -56,7 +56,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <active.since93.ancount.custom.CustomTextView
                     android:id="@+id/yesterdayCount"
@@ -98,7 +98,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <active.since93.ancount.custom.CustomTextView
                     android:id="@+id/lastWeekCount"
@@ -131,7 +131,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <active.since93.ancount.custom.CustomTextView
                     android:id="@+id/aversgeCount"

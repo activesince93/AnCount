@@ -34,12 +34,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import active.since93.ancount.R;
 import active.since93.ancount.constants.Constants;
 import active.since93.ancount.custom.CustomTextView;
 import active.since93.ancount.database.DatabaseHandler;
 import active.since93.ancount.graph.MyMarkerView;
+import active.since93.ancount.model.StringAndInteger;
 import active.since93.ancount.model.UnlockDataItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -106,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         mChart.setDescription("");
         setChartData();
         mChart.setMaxVisibleValueCount(60);
-        mChart.setPinchZoom(false);
+        mChart.setDoubleTapToZoomEnabled(false);
+        mChart.setScaleEnabled(false);
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(false);
         mChart.setDrawGridBackground(false);
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setActionBarCustomFont() {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Light.ttf");
+        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Regular.ttf");
         SpannableStringBuilder ss = new SpannableStringBuilder(getString(R.string.app_name_caps));
         ss.setSpan(new CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         if (actionBar != null) {
@@ -150,22 +153,16 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<UnlockDataItem> unlockDataItemArrayList;
         ArrayList<BarEntry> yVals = new ArrayList<>();
-        ArrayList<String> xVals;
+        ArrayList<String> xVals = new ArrayList<>();
         // last 7 days
         unlockDataItemArrayList = databaseHandler.getPreviousData(6, 0, 0);
-        xVals = databaseHandler.getLast7daysNames();
-        for (int i = 0; i < xVals.size(); i++) {
-            int count = 0;
-            for (int j = 0; j < unlockDataItemArrayList.size(); j++) {
-                if (xVals.get(i).equalsIgnoreCase(unlockDataItemArrayList.get(j).getDayName())) {
-                    count += 1;
-                }
-            }
-            if(i == (xVals.size() - 1)) todayCountInt = count;
-            if(i == (xVals.size() - 2)) yesterdayCountInt = count;
-            lastWeekCountInt += count;
-            yVals.add(new BarEntry(count, i));
+        ArrayList<StringAndInteger> daysAndCountArrayList = getDaysAndCountArrayList(unlockDataItemArrayList);
+
+        for(int i = 0; i < daysAndCountArrayList.size(); i++) {
+            xVals.add(daysAndCountArrayList.get(i).getDay());
+            yVals.add(new BarEntry(daysAndCountArrayList.get(i).getCount(), i));
         }
+
         BarDataSet set1 = new BarDataSet(yVals, "Data Set");
         set1.setColors(ColorTemplate.VORDIPLOM_COLORS);
         set1.setDrawValues(false);
@@ -177,9 +174,37 @@ public class MainActivity extends AppCompatActivity {
         mChart.setData(data);
         mChart.invalidate();
 
+        for(UnlockDataItem unlockDataItem : unlockDataItemArrayList) {
+            if(Constants.getDateOnly(Long.parseLong(unlockDataItem.getTime())).equals("Today")) ++todayCountInt;
+            else if(Constants.getDateOnly(Long.parseLong(unlockDataItem.getTime())).equals("Yesterday")) ++yesterdayCountInt;
+            ++lastWeekCountInt;
+        }
+
         yesterdayCount.setText(String.valueOf(yesterdayCountInt));
         todayCount.setText(String.valueOf(todayCountInt));
         lastWeekCount.setText(String.valueOf(lastWeekCountInt));
+    }
+
+    private ArrayList<StringAndInteger> getDaysAndCountArrayList(ArrayList<UnlockDataItem> unlockDataItemArrayList) {
+        ArrayList<StringAndInteger> daysAndCountArrayList = new ArrayList<>();
+
+        HashSet<String> dayNameSet = new HashSet<>();
+        for(UnlockDataItem unlockDataItem : unlockDataItemArrayList) {
+            dayNameSet.add(unlockDataItem.getDayName());
+        }
+
+        for(String dayName : dayNameSet) {
+            String relativeDay = "";
+            int count = 0;
+            for (UnlockDataItem unlockDataItem : unlockDataItemArrayList) {
+                if(dayName.equals(unlockDataItem.getDayName())) {
+                    ++count;
+                    relativeDay = Constants.getDateOnly(Long.parseLong(unlockDataItem.getTime()));
+                }
+            }
+            daysAndCountArrayList.add(new StringAndInteger(relativeDay, count));
+        }
+        return daysAndCountArrayList;
     }
 
     public static void backupDatabase() throws IOException {

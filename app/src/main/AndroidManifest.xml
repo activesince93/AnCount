@@ -11,8 +11,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="active.since93.ancount.activities.MainActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -22,7 +22,8 @@
         <activity
             android:name="active.since93.ancount.activities.HistoryActivity"
             android:label="@string/title_history"
-            android:parentActivityName="active.since93.ancount.activities.MainActivity">
+            android:parentActivityName="active.since93.ancount.activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="active.since93.ancount.activities.MainActivity" />
@@ -31,7 +32,8 @@
         <activity
             android:name="active.since93.ancount.activities.AnalysisActivity"
             android:label="@string/title_analysis"
-            android:parentActivityName="active.since93.ancount.activities.MainActivity">
+            android:parentActivityName="active.since93.ancount.activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="active.since93.ancount.activities.MainActivity" />

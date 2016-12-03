@@ -4,9 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -43,13 +49,14 @@ public class HistoryActivity extends AppCompatActivity {
 
         loadAd();
 
-        // TODO Receive broadcast message
         IntentFilter intentFilter = new IntentFilter(Constants.UPDATE_ACTIVITIES);
         LocalBroadcastManager.getInstance(this).registerReceiver(updateDataReceiver, intentFilter);
 
         databaseHandler = new DatabaseHandler(this);
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
         displayListData();
+
+        setActionBarCustomFont();
 
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             int previousItem = -1;
@@ -75,6 +82,54 @@ public class HistoryActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void setActionBarCustomFont() {
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Regular.ttf");
+        SpannableStringBuilder ss = new SpannableStringBuilder(getString(R.string.title_history).toUpperCase());
+        ss.setSpan(new CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        if (actionBar != null) {
+            actionBar.setTitle(ss);
+        }
+    }
+
+    public class CustomTypefaceSpan extends TypefaceSpan {
+        private final Typeface newType;
+        public CustomTypefaceSpan(String family, Typeface type) {
+            super(family);
+            newType = type;
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            applyCustomTypeFace(ds, newType);
+        }
+
+        @Override
+        public void updateMeasureState(TextPaint paint) {
+            applyCustomTypeFace(paint, newType);
+        }
+
+        private void applyCustomTypeFace(Paint paint, Typeface tf) {
+            int oldStyle;
+            Typeface old = paint.getTypeface();
+            if (old == null) {
+                oldStyle = 0;
+            } else {
+                oldStyle = old.getStyle();
+            }
+
+            int fake = oldStyle & ~tf.getStyle();
+            if ((fake & Typeface.BOLD) != 0) {
+                paint.setFakeBoldText(true);
+            }
+
+            if ((fake & Typeface.ITALIC) != 0) {
+                paint.setTextSkewX(-0.25f);
+            }
+            paint.setTypeface(tf);
+        }
     }
 
     private void prepareListData() {

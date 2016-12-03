@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import active.since93.ancount.constants.Constants;
 import active.since93.ancount.model.UnlockDataItem;
 
 /**
@@ -295,14 +296,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         long seconds = DatabaseUtils.longForQuery(db, selectChoice, null);
         seconds *= 1000;
 
-        String strQuery = "SELECT DISTINCT " + UNLOCK_DAY_NAME + " FROM " + TABLE_UNLOCKS + " WHERE " + UNLOCK_TIME + ">"
-                + seconds/* + " ORDER BY " + UNLOCK_TIME + " DESC"*/;
+        String strQuery = "SELECT DISTINCT * FROM " + TABLE_UNLOCKS + " WHERE " + UNLOCK_TIME + ">"
+                + seconds + " GROUP BY " + UNLOCK_DAY_NAME;
 
         Cursor cursor = db.rawQuery(strQuery, null);
         ArrayList<String> last7DaysNameArrayList = new ArrayList<>();
         if(cursor.moveToFirst()) {
             do {
-                last7DaysNameArrayList.add(cursor.getString(0));
+                last7DaysNameArrayList.add(Constants.getDateOnly(Long.parseLong(cursor.getString(1))));
             } while(cursor.moveToNext());
         }
         return last7DaysNameArrayList;
