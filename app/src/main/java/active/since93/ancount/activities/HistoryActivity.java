@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.format.DateUtils;
 import android.text.style.TypefaceSpan;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,7 +130,14 @@ public class HistoryActivity extends AppCompatActivity {
                         }
                     }
                     String dayDate = daysCount.get(k);
-                    String subHeaderTitle = dayDate + getDateExtension(Integer.parseInt(dayDate)) + ", " + monthsCount.get(j);
+                    String subHeaderTitle;
+                    if(DateUtils.isToday(Long.parseLong(daysDataArrayList.get(0).getTime()))) {
+                        subHeaderTitle = "Today";
+                    } else if(Constants.isYesterday(Long.parseLong(daysDataArrayList.get(0).getTime()))) {
+                        subHeaderTitle = "Yesterday";
+                    } else {
+                        subHeaderTitle = dayDate + getDateExtension(Integer.parseInt(dayDate)) + ", " + monthsCount.get(j);
+                    }
                     String subHeaderCount = String.valueOf(daysDataArrayList.size());
 
                     expandableListSubHeaderItem.setStrHeader(subHeaderTitle);

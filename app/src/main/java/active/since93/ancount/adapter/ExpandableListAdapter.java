@@ -48,7 +48,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		CustomTextView txtListChild = (CustomTextView) convertView.findViewById(R.id.txtListItem);
 		CustomTextView txtListChildCount = (CustomTextView) convertView.findViewById(R.id.txtListItemCount);
 		String titles[] = expandableListHeaderItem.getStrHeader().split(",");
-		String str = titles[0] + ", " + getMonthName(titles[1].trim());
+		String str = (titles.length > 1) ? titles[0] + ", " + getMonthName(titles[1].trim()) : titles[0];
 		txtListChild.setText(str);
 		txtListChildCount.setText(expandableListHeaderItem.getCountHeader());
 		return convertView;

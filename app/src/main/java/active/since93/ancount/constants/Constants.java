@@ -31,25 +31,38 @@ public class Constants {
      * @return time in string for e.x. TOMORROW, TODAY, 02/12(dd/MM) etc.
      */
     public static String getDateOnly(long smsTimeInMillis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeInMillis(smsTimeInMillis);
-        Calendar now = Calendar.getInstance();
-        Date date = new Date(smsTimeInMillis);
-
-        String dateStr = DateUtils.getRelativeTimeSpanString(smsTimeInMillis
-                , now.getTimeInMillis()
-                , DateUtils.DAY_IN_MILLIS
-                , DateUtils.FORMAT_ABBREV_RELATIVE).toString();
-
-        if(dateStr.equals("Today") || dateStr.equals("Tomorrow") || dateStr.equals("Yesterday")) {
-            return dateStr;
+        if(DateUtils.isToday(smsTimeInMillis)) {
+            return "Today";
+        } else if(isYesterday(smsTimeInMillis)) {
+            return "Yesterday";
         } else {
             // Any other date
+            Calendar smsTime = Calendar.getInstance();
+            smsTime.setTimeInMillis(smsTimeInMillis);
+            Date date = new Date(smsTimeInMillis);
+
             String dateTimeFormatString = "dd/MM";
             SimpleDateFormat df = new SimpleDateFormat(dateTimeFormatString, Locale.US);
             df.setTimeZone(TimeZone.getDefault());
             return df.format(date);
         }
+    }
+
+    /**
+     * Check if date is yesterday
+     * @param date date in millis
+     * @return true if date is yesterday
+     */
+    public static boolean isYesterday(long date) {
+        Calendar now = Calendar.getInstance();
+        Calendar cdate = Calendar.getInstance();
+        cdate.setTimeInMillis(date);
+
+        now.add(Calendar.DATE, -1);
+
+        return now.get(Calendar.YEAR) == cdate.get(Calendar.YEAR)
+                && now.get(Calendar.MONTH) == cdate.get(Calendar.MONTH)
+                && now.get(Calendar.DATE) == cdate.get(Calendar.DATE);
     }
 
     public static class CustomTypefaceSpan extends TypefaceSpan {
