@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AnCount</string>
+    <string name="app_version">v1.0.0</string>
     <string name="app_name_caps">ANCOUNT</string>
     <string name="banner_ad_unit_id">ca-app-pub-2167783314867366/6723849130</string>
 
@@ -21,6 +22,8 @@
     <string name="last_six_months">last 6 months</string>
     <string name="last_year">last year</string>
 
+    <string name="app_details">v 1.0.0\n\n\nAnCount is an app which will keeps data of how many times you have unlocked your phone throughout the day.\n\nEvery time you unlock your phone it will be stored in AnCount database and you will be able to see the results month/day wise, it will also show your average unlock count.</string>
+
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
@@ -36,7 +39,8 @@
         <item>@string/last_year</item>
     </string-array>
 
-    <string name="title_analysis">Analysis</string>
     <string name="title_history">History</string>
     <string name="title_home">Home</string>
+    <string name="about">About</string>
+    <string name="title_about">About</string>
 </resources>

@@ -30,8 +30,8 @@
         </activity>
 
         <activity
-            android:name="active.since93.ancount.activities.AnalysisActivity"
-            android:label="@string/title_analysis"
+            android:name="active.since93.ancount.activities.AboutActivity"
+            android:label="@string/about"
             android:parentActivityName="active.since93.ancount.activities.MainActivity"
             android:screenOrientation="portrait">
             <meta-data

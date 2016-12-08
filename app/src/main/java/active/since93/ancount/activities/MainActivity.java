@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import active.since93.ancount.R;
 import active.since93.ancount.constants.Constants;
@@ -87,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-        if (id == R.id.action_analysis) {
-            Intent intent = new Intent(MainActivity.this, AnalysisActivity.class);
+        if (id == R.id.action_about) {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
             return true;
         }
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Regular.ttf");
         SpannableStringBuilder ss = new SpannableStringBuilder(getString(R.string.app_name_caps));
-        ss.setSpan(new CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(new Constants.CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         if (actionBar != null) {
             actionBar.setTitle(ss);
         }
@@ -188,16 +189,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<StringAndInteger> getDaysAndCountArrayList(ArrayList<UnlockDataItem> unlockDataItemArrayList) {
         ArrayList<StringAndInteger> daysAndCountArrayList = new ArrayList<>();
 
-        HashSet<String> dayNameSet = new HashSet<>();
+        LinkedHashSet<String> dayDateSet = new LinkedHashSet<>();
         for(UnlockDataItem unlockDataItem : unlockDataItemArrayList) {
-            dayNameSet.add(unlockDataItem.getDayName());
+            dayDateSet.add(unlockDataItem.getDate());
         }
 
-        for(String dayName : dayNameSet) {
+        for(String dayDate : dayDateSet) {
             String relativeDay = "";
             int count = 0;
             for (UnlockDataItem unlockDataItem : unlockDataItemArrayList) {
-                if(dayName.equals(unlockDataItem.getDayName())) {
+                if(dayDate.equals(unlockDataItem.getDate())) {
                     ++count;
                     relativeDay = Constants.getDateOnly(Long.parseLong(unlockDataItem.getTime()));
                 }
@@ -226,44 +227,6 @@ public class MainActivity extends AppCompatActivity {
         output.flush();
         output.close();
         fis.close();
-    }
-
-    public class CustomTypefaceSpan extends TypefaceSpan {
-        private final Typeface newType;
-        public CustomTypefaceSpan(String family, Typeface type) {
-            super(family);
-            newType = type;
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            applyCustomTypeFace(ds, newType);
-        }
-
-        @Override
-        public void updateMeasureState(TextPaint paint) {
-            applyCustomTypeFace(paint, newType);
-        }
-
-        private void applyCustomTypeFace(Paint paint, Typeface tf) {
-            int oldStyle;
-            Typeface old = paint.getTypeface();
-            if (old == null) {
-                oldStyle = 0;
-            } else {
-                oldStyle = old.getStyle();
-            }
-
-            int fake = oldStyle & ~tf.getStyle();
-            if ((fake & Typeface.BOLD) != 0) {
-                paint.setFakeBoldText(true);
-            }
-
-            if ((fake & Typeface.ITALIC) != 0) {
-                paint.setTextSkewX(-0.25f);
-            }
-            paint.setTypeface(tf);
-        }
     }
 
     @Override

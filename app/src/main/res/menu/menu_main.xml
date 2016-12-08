@@ -4,16 +4,15 @@
     tools:context=".activities.MainActivity">
 
     <item
-        android:id="@+id/action_analysis"
-        android:title="@string/title_analysis"
-        android:icon="@drawable/action_analysis"
-        android:visible="false"
+        android:id="@+id/action_about"
+        android:title="@string/about"
+        android:icon="@drawable/ic_about_outline_white_24dp"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_history"
         android:title="@string/title_history"
-        android:icon="@drawable/action_history"
+        android:icon="@drawable/ic_history_white_24dp"
         app:showAsAction="always" />
 
 </menu>

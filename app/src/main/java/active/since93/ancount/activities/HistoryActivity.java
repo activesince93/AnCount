@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.TypefaceSpan;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -88,47 +89,9 @@ public class HistoryActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/JosefinSans-Regular.ttf");
         SpannableStringBuilder ss = new SpannableStringBuilder(getString(R.string.title_history).toUpperCase());
-        ss.setSpan(new CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        ss.setSpan(new Constants.CustomTypefaceSpan("", font2), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         if (actionBar != null) {
             actionBar.setTitle(ss);
-        }
-    }
-
-    public class CustomTypefaceSpan extends TypefaceSpan {
-        private final Typeface newType;
-        public CustomTypefaceSpan(String family, Typeface type) {
-            super(family);
-            newType = type;
-        }
-
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            applyCustomTypeFace(ds, newType);
-        }
-
-        @Override
-        public void updateMeasureState(TextPaint paint) {
-            applyCustomTypeFace(paint, newType);
-        }
-
-        private void applyCustomTypeFace(Paint paint, Typeface tf) {
-            int oldStyle;
-            Typeface old = paint.getTypeface();
-            if (old == null) {
-                oldStyle = 0;
-            } else {
-                oldStyle = old.getStyle();
-            }
-
-            int fake = oldStyle & ~tf.getStyle();
-            if ((fake & Typeface.BOLD) != 0) {
-                paint.setFakeBoldText(true);
-            }
-
-            if ((fake & Typeface.ITALIC) != 0) {
-                paint.setTextSkewX(-0.25f);
-            }
-            paint.setTypeface(tf);
         }
     }
 
@@ -226,5 +189,16 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Constants.STATUS_HISTORY_ACTIVITY = false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

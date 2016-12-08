@@ -268,7 +268,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
         String strQuery = "SELECT * FROM " + TABLE_UNLOCKS + " WHERE " + UNLOCK_TIME + ">"
-                + seconds /*+ " ORDER BY " + UNLOCK_TIME + " DESC"*/;
+                + seconds + " ORDER BY " + UNLOCK_TIME + " DESC";
 
         Cursor cursor = db.rawQuery(strQuery, null);
         ArrayList<UnlockDataItem> unlockDataItemArrayList = new ArrayList<UnlockDataItem>();
