@@ -39,6 +39,16 @@
                 android:value="active.since93.ancount.activities.MainActivity" />
         </activity>
 
+        <activity
+            android:name="active.since93.ancount.activities.SingleDayActivity"
+            android:label="@string/about"
+            android:parentActivityName="active.since93.ancount.activities.HistoryActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="active.since93.ancount.activities.HistoryActivity" />
+        </activity>
+
         <receiver android:name="active.since93.ancount.receiver.UnlockReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />

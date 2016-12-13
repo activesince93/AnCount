@@ -1,10 +1,15 @@
 package active.since93.ancount.constants;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.TextPaint;
+import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.text.style.TypefaceSpan;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +19,7 @@ import java.util.TimeZone;
 
 /**
  * Created by myzupp on 15-02-2016.
+ * @author Darshan Parikh (parikhdarshan36@gmail.com)
  */
 public class Constants {
 
@@ -23,6 +29,8 @@ public class Constants {
 
     //Broadcast message
     public static final String UPDATE_ACTIVITIES = "active.since93.UPDATE_ACTIVITIES";
+    public static final String DATE_VALUE = "date_value";
+    public static final String YEAR_VALUE = "YEAR_VALUE";
 
     /**
      * Get formatted date
@@ -46,6 +54,25 @@ public class Constants {
             df.setTimeZone(TimeZone.getDefault());
             return df.format(date);
         }
+    }
+
+    /**
+     * Get formatted time
+     *
+     * @param smsTimeInMillis time in milliseconds
+     * @return time in string for e.x. 02:15:55
+     */
+    public static String getTimeOnly(Context context, long smsTimeInMillis) {
+        // Any other date
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeInMillis(smsTimeInMillis);
+        Date date = new Date(smsTimeInMillis);
+
+        final String timeFormatString = (!DateFormat.is24HourFormat(context))
+                ? "hh:mm:ss aa" : "HH:mm:ss";
+        SimpleDateFormat df = new SimpleDateFormat(timeFormatString, Locale.US);
+        df.setTimeZone(TimeZone.getDefault());
+        return df.format(date);
     }
 
     /**
@@ -101,5 +128,17 @@ public class Constants {
             }
             paint.setTypeface(tf);
         }
+    }
+
+    /**
+     * Load ad in screen
+     * @param mAdView adView
+     */
+    public static void loadAd(AdView mAdView) {
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("01655592ABF64891026E34AE31E4D613")
+                .addTestDevice("9F5AC4E8105A5E67840DFECF888E4B84")
+                .build();
+        mAdView.loadAd(adRequest);
     }
 }

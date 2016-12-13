@@ -34,7 +34,8 @@ public class AboutActivity extends AppCompatActivity {
         txtDetails.setTypeface(fontRegular);
         txtTitle.setTypeface(fontLight);
 
-        loadAd();
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        Constants.loadAd(mAdView);
         setActionBarCustomFont();
     }
 
@@ -57,14 +58,5 @@ public class AboutActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void loadAd() {
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice("01655592ABF64891026E34AE31E4D613")
-                .addTestDevice("9F5AC4E8105A5E67840DFECF888E4B84")
-                .build();
-        mAdView.loadAd(adRequest);
     }
 }

@@ -1,6 +1,7 @@
 package active.since93.ancount.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import active.since93.ancount.R;
+import active.since93.ancount.activities.SingleDayActivity;
+import active.since93.ancount.constants.Constants;
 import active.since93.ancount.custom.CustomTextView;
 import active.since93.ancount.model.ExpandableListHeaderItem;
 
@@ -37,7 +40,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		ExpandableListHeaderItem expandableListHeaderItem = getChild(groupPosition, childPosition);
 
 		if (convertView == null) {
@@ -51,6 +54,24 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		String str = (titles.length > 1) ? titles[0] + ", " + getMonthName(titles[1].trim()) : titles[0];
 		txtListChild.setText(str);
 		txtListChildCount.setText(expandableListHeaderItem.getCountHeader());
+
+		final int finalChildPosition = childPosition;
+		final int finalGroupPosition = groupPosition;
+		txtListChild.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ExpandableListHeaderItem expandableListChildItem = getChild(finalGroupPosition, finalChildPosition);
+				ExpandableListHeaderItem expandableListHeaderItem = getGroup(finalGroupPosition);
+				String childTitle = expandableListChildItem.getStrHeader();
+				String groupTitle = expandableListHeaderItem.getStrHeader();
+
+				Intent intent = new Intent(_context, SingleDayActivity.class);
+				intent.putExtra(Constants.DATE_VALUE, childTitle);
+				intent.putExtra(Constants.YEAR_VALUE, groupTitle);
+				_context.startActivity(intent);
+			}
+		});
+
 		return convertView;
 	}
 

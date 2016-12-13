@@ -201,6 +201,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return yearDataArrayList;
     }
 
+    public ArrayList<UnlockDataItem> getDataForSelectedDate(String date, String month, String year) {
+        ArrayList<UnlockDataItem> yearDataArrayList = new ArrayList<UnlockDataItem>();
+        String strQuery = "SELECT * FROM " + TABLE_UNLOCKS + " WHERE "
+                + UNLOCK_DATE + "='" + date + "' AND "
+                + UNLOCK_MONTH + "='" + month + "' AND "
+                + UNLOCK_YEAR + "='" + year + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(strQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                UnlockDataItem unlockDataItem = new UnlockDataItem();
+                unlockDataItem.setCount(Integer.parseInt(cursor.getString(0)));
+                unlockDataItem.setTime(cursor.getString(1));
+                unlockDataItem.setYear(cursor.getString(2));
+                unlockDataItem.setMonth(cursor.getString(3));
+                unlockDataItem.setDayName(cursor.getString(4));
+                unlockDataItem.setDate(cursor.getString(5));
+                unlockDataItem.setHour(cursor.getString(6));
+                unlockDataItem.setMinute(cursor.getString(7));
+                unlockDataItem.setSecond(cursor.getString(8));
+
+                yearDataArrayList.add(unlockDataItem);
+            } while(cursor.moveToNext());
+        }
+        return yearDataArrayList;
+    }
+
+
+
     public ArrayList<String> getNumberOfMonthsForSelectedYear(String year) {
         String strQuery = "SELECT DISTINCT "+ UNLOCK_MONTH + " FROM " + TABLE_UNLOCKS + " WHERE " + UNLOCK_YEAR + "='" + year + "'";
         SQLiteDatabase db = this.getReadableDatabase();
