@@ -11,3 +11,16 @@ Hope you will spend less time with your phone after checking out the results. Ca
 If you are worried about application permissions! Well don't worry. 
 This app doesn't use unnecessary permissions. The thing is that, this app does not use any permission. 
 Yes! no permissions at all. So forget worrying about your personal data or any confidential information. Cause this thing #respects your PRIVACY.
+
+### Screens
+- Summery
+![summery](https://github.com/activesince93/AnCount/blob/master/screens/summery.jpeg)
+
+- Analysis
+![analysis](https://github.com/activesince93/AnCount/blob/master/screens/analysis.jpeg)
+
+- History
+![history](https://github.com/activesince93/AnCount/blob/master/screens/history.jpeg)
+
+- Widget
+![widget](https://github.com/activesince93/AnCount/blob/master/screens/widget.jpeg)
