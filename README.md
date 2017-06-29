@@ -13,14 +13,14 @@ This app doesn't use unnecessary permissions. The thing is that, this app does n
 Yes! no permissions at all. So forget worrying about your personal data or any confidential information. Cause this thing #respects your PRIVACY.
 
 ### Screens
-- Summery
+- Summery  
 ![summery](https://github.com/activesince93/AnCount/blob/master/screens/summery.jpeg)
 
-- Analysis
+- Analysis  
 ![analysis](https://github.com/activesince93/AnCount/blob/master/screens/analysis.jpeg)
 
-- History
+- History  
 ![history](https://github.com/activesince93/AnCount/blob/master/screens/history.jpeg)
 
-- Widget
+- Widget  
 ![widget](https://github.com/activesince93/AnCount/blob/master/screens/widget.jpeg)
