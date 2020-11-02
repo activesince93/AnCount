@@ -1,5 +1,5 @@
 # AnCount
-Wanna know how many times do you check your phone?
+Want to know how many times do you check your phone?
 Well, AnCount is the answer. 
 
 Install the app once, and that's all. This app will keep your data and you will be able to see how many times you are checking your phone. 
